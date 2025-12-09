@@ -6,8 +6,11 @@
 
 因为使用JS实现功能，浏览器可能会存在卡顿现象，建议用pywebview打下包，或者是用wails/tauri打包成客户端游玩。
 
+代码存在的安全风险未知，纯AI编写未作审查。
+
 ## 快速开始
 - 方式一：直接双击项目根目录下的 `index.html` 在浏览器中打开。
+
 - 方式二：使用本地静态服务器，浏览器访问 `http://localhost:8000/`
   - Python（3.x）
     ```bash
@@ -18,6 +21,24 @@
   - 或使用任意前端静态服务器工具（确保根目录可被作为站点目录）。
   
   注：本地游玩，不建议互联网开放。
+
+## 游戏截图
+
+BOSS【佛陀】
+
+![image-20251209114636534](C:\Users\qun\AppData\Roaming\Typora\typora-user-images\image-20251209114636534.png)
+
+NPC图鉴
+
+![image-20251209114804716](C:\Users\qun\AppData\Roaming\Typora\typora-user-images\image-20251209114804716.png)
+
+法宝技能
+
+![image-20251209134836480](C:\Users\qun\AppData\Roaming\Typora\typora-user-images\image-20251209134836480.png)
+
+战技-转刀
+
+![image-20251209134904616](C:\Users\qun\AppData\Roaming\Typora\typora-user-images\image-20251209134904616.png)
 
 ## 游戏操作（快捷键）
 - W / A / S / D：移动
