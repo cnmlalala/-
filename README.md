@@ -26,19 +26,19 @@
 
 BOSS【佛陀】
 
-![image-20251209114636534](C:\Users\qun\AppData\Roaming\Typora\typora-user-images\image-20251209114636534.png)
+![image-20251209114636534.png](image-20251209114636534.png))
 
 NPC图鉴
 
-![image-20251209114804716](C:\Users\qun\AppData\Roaming\Typora\typora-user-images\image-20251209114804716.png)
+![image-20251209114804716](image-20251209114804716.png)
 
 法宝技能
 
-![image-20251209134836480](C:\Users\qun\AppData\Roaming\Typora\typora-user-images\image-20251209134836480.png)
+![image-20251209134836480](image-20251209134836480.png)
 
 战技-转刀
 
-![image-20251209134904616](C:\Users\qun\AppData\Roaming\Typora\typora-user-images\image-20251209134904616.png)
+![image-20251209134904616](image-20251209134904616.png)
 
 ## 游戏操作（快捷键）
 - W / A / S / D：移动
