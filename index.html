@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>转刀修仙</title>
+  <!-- Inline SVG favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23ff8c3f'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="hud">
+    <div class="hud-left">
+      <div class="panel xian-panel">
+        <div class="panel-title">修仙面板</div>
+        <div id="health-bar"><span id="health-fill"></span></div>
+        <div id="stats">
+          <span id="weapon-count">武器：0/5</span>
+          <span id="highest-quality">最高品质：白色</span>
+          <span id="kills-count">斩杀妖邪：0</span>
+          <span id="treasure-held">所持法宝：无</span>
+          <span id="pickup-log" class="log"></span>
+        </div>
+      </div>
+    </div>
+    <div class="hud-right">
+      <div class="minimap-box">
+        <canvas id="minimapCanvas" width="160" height="160"></canvas>
+      </div>
+      <!-- 原暂停/继续按钮已移除，只保留快捷键 P 控制 -->
+    </div>
+  </div>
+
+  <canvas id="gameCanvas"></canvas>
+
+  <!-- 结算窗口 -->
+  <div id="gameOverModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>修行中道殒</h2>
+      <p id="stat-pickups">获得法宝：0 件</p>
+      <p id="stat-kills">斩杀妖邪：0 只</p>
+      <p id="stat-time">存活时长：0 秒</p>
+      <p id="stat-eval">评价：-</p>
+      <button id="restart-btn">再入仙途</button>
+    </div>
+  </div>
+
+  <noscript>需要启用JavaScript才能运行游戏。</noscript>
+  <script src="src/assets.js"></script>
+    <script src="src/core.js"></script>
+    <!-- 通用战技系统 -->
+    <script src="src/skill_system.js"></script>
+    <script src="src/cultivation_panel.js"></script>
+    <script src="src/help_panel.js"></script>
+    <!-- Treasure FX module -->
+    <script src="src/treasure_fx.js"></script>
+    <!-- 独立武器环绕模块（视觉） -->
+    <script src="src/orbit_fx.js"></script>
+    <script src="src/treasures.js"></script>
+    <script src="src/background.js"></script>
+  <script src="src/enemies_buildings.js"></script>
+  <script src="src/collisions.js"></script>
+  <!-- 怪物对话模块 -->
+  <script src="src/monster_dialogue.js"></script>
+  <!-- 技能视觉效果模块（独立控制技能武器光晕等效果） -->
+  <script src="src/skill_vfx.js"></script>
+  <!-- Boss技能核心与拆分后的各Boss技能 -->
+  <script src="src/boss_skill_core.js"></script>
+  <script src="src/boss_niumo_skills.js"></script>
+  <script src="src/boss_buddha_skills.js"></script>
+  <script src="src/boss_longwang_skills.js"></script>
+  <script src="src/boss_fairy_skills.js"></script>
+  <script src="src/boss_tiandi_skills.js"></script>
+  <script src="src/render_particles.js"></script>
+  <!-- 图鉴面板（B键） -->
+  <script src="src/codex_panel.js"></script>
+  <script src="src/game.js"></script>
+</body>
+</html>

@@ -1,0 +1,1136 @@
+/* 全局样式与响应式布局 */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #0b1020;
+  color: #fff;
+  font-family: "Segoe UI", Arial, "Noto Sans SC", sans-serif;
+}
+
+#gameCanvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(1200px at 50% 50%, #1a2340, #0b1020);
+}
+
+/* HUD */
+#hud {
+  position: fixed;
+  top: 10px; /* give slight margin from top */
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 0 14px; /* reduce padding to shrink height */
+  background: none; /* remove wide shadow overlay */
+  backdrop-filter: none;
+  box-shadow: none;
+  pointer-events: none; /* allow clicks to pass through by default */
+  z-index: 10;
+}
+/* Ensure interactive elements inside remain clickable */
+#hud .xian-panel,
+#pause-btn {
+  pointer-events: auto;
+}
+
+/* Stack status and minimap panels neatly */
+.hud-left,
+.hud-right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Allow panels themselves to cast a subtle shadow for visibility */
+.xian-panel{
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: "KaiTi", serif;
+  font-size: 14px;
+  color:#e9e4d8;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* Minimap refine */
+.minimap-box{
+  width: 140px;
+  height: 140px;
+  position:relative;
+  overflow:hidden;
+}
+#minimapCanvas{
+  width:100%;
+  height:100%;
+  display:block;
+  background:rgba(0,0,0,0.35);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:4px;
+}
+#health-bar {
+  width: 240px;
+  height: 18px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+#health-fill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #24c6dc, #514a9d);
+}
+
+#stats {
+  display: inline-flex;
+  gap: 12px;
+  margin-left: 12px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* 移除暂停按钮相关样式 */
+/* #pause-btn { display:none; } */
+#pause-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  cursor: pointer;
+}
+#pause-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* 浮动提示文字 */
+.float-text {
+  position: absolute;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  font-weight: 600;
+  pointer-events: none;
+  animation: floatUp 3s ease-out forwards;
+}
+@keyframes floatUp {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-40px); opacity: 0; }
+}
+.float-text.ft-error{
+  color: #ff3b3b;
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.65), 0 0 2px rgba(255, 0, 0, 0.35);
+  font-weight: bold;
+}
+/* 紫色异常提示：武器丢失、破损、品质下降、麻痹/束缚等 */
+.float-text.ft-purple{
+  color: #c087ff;
+  text-shadow: 0 0 10px rgba(192, 135, 255, 0.75), 0 0 4px rgba(120, 60, 200, 0.55);
+  font-weight: 700;
+}
+.modal{ position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:1000; font-family: "KaiTi", serif; }
+.modal.hidden{ display:none; }
+.modal-content{ background:rgba(255,248,235,0.95); padding:24px 40px; border:3px solid #d4af37; border-radius:12px; text-align:center; box-shadow:0 0 12px rgba(0,0,0,0.5); }
+.modal-content h2{ margin-top:0; font-size:28px; color:#8B4513; }
+.modal-content p{ margin:6px 0; font-size:18px; color:#333; }
+.modal-content button{ margin-top:12px; padding:6px 18px; font-size:16px; background:#d4af37; color:#fff; border:none; border-radius:6px; cursor:pointer; }
+.modal-content button:hover{ filter:brightness(1.1); }
+
+/* ===== Xian Style Panel ===== */
+.xian-panel{
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.25);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-family: "KaiTi", serif;
+  font-size: 14px;
+  color:#e9e4d8;
+}
+.panel-title{
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:4px;
+  color:#f9d58b;
+  text-shadow:0 0 6px rgba(249,213,139,0.6);
+}
+.minimap-box{
+  width: 160px;
+  height: 160px;
+  position:relative;
+  overflow:hidden;
+  background:rgba(255,248,235,0.08);
+  border:4px solid transparent;
+  border-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%228%22 height=%228%22 viewBox=%220 0 8 8%22><rect width=%228%22 height=%228%22 fill=%22%23d4af37%22/><rect y=%221%22 width=%228%22 height=%226%22 fill=%22%23f9f5e3%22/></svg>') 4 stretch;
+  box-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+#minimapCanvas{
+  width:100%;
+  height:100%;
+  display:block;
+  background:rgba(0,0,0,0.25);
+  border:none;
+}
+/* improve panel text readability */
+.xian-panel{
+  color:#ffffff;
+}
+#stats span{
+  color:#dcd9c9;
+}
+.panel-title{
+  color:#ffe7aa;
+}
+
+#minimap-container{
+  position:relative;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+  border:1px solid rgba(255,255,255,0.2);
+}
+.minimap-dot{
+  position:absolute;
+  width:4px;
+  height:4px;
+  background:#ff5656;
+  border-radius:50%;
+}
+.minimap-player{
+  background:#6cfaff;
+}
+.minimap-box{
+  position:relative;
+}
+.minimap-box .panel-title{
+  position:absolute;
+  top:6px;
+  left:6px;
+  margin:0;
+  z-index:2;
+  pointer-events:none;
+}
+#minimapCanvas{
+  width:100%;
+  height:100%;
+  display:block;
+}
+.minimap-box{
+  width:160px;
+  height:160px;
+  position:relative;
+  background:none;
+  border:none;
+  box-shadow:none;
+}
+#minimapCanvas{
+  background:transparent;
+}
+/* improve panel text readability */
+.xian-panel{
+  color:#ffffff;
+}
+#stats span{
+  color:#dcd9c9;
+}
+.panel-title{
+  color:#ffe7aa;
+}
+
+#minimap-container{
+  position:relative;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+  border:1px solid rgba(255,255,255,0.2);
+}
+.minimap-dot{
+  position:absolute;
+  width:4px;
+  height:4px;
+  background:#ff5656;
+  border-radius:50%;
+}
+.minimap-player{
+  background:#6cfaff;
+}
+.minimap-box{
+  position:relative;
+}
+.minimap-box .panel-title{
+  position:absolute;
+  top:6px;
+  left:6px;
+  margin:0;
+  z-index:2;
+  pointer-events:none;
+}
+#minimapCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+}
+.minimap-box{
+  width:160px;
+  height:160px;
+  border:2px solid rgba(255,255,255,0.25);
+  background:rgba(0,0,0,0.25);
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+  box-sizing:border-box;
+}
+#minimapCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+/* Remove panel-title vertical layout related to minimap */
+.minimap-box .panel-title{display:none!important;}
+
+/* --- Minimap canvas cleanup --- */
+#minimapCanvas, canvas.minimap{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.minimap-box,
+.minimap-box *,
+.minimap-box::before,
+.minimap-box::after{
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#minimapCanvas{
+  background: transparent !important;
+  border: none !important;
+}
+/* --- Minimap final override to ensure visibility --- */
+#minimapCanvas,
+canvas.minimap{
+  width:160px;
+  height:160px;
+  background: rgba(0,0,0,0.35) !important;
+  border:none !important;
+  box-shadow:none !important;
+}
+.minimap-box{
+  width:160px;
+  height:160px;
+  position:relative;
+  background:none;
+  border:none;
+  box-shadow:none;
+}
+.minimap-box .panel-title{
+  position:absolute;
+  top:6px;
+  left:6px;
+  margin:0;
+  z-index:2;
+  pointer-events:none;
+}
+#minimapCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+}
+.minimap-box{
+  width:160px;
+  height:160px;
+  position:relative;
+  background:none;
+  border:none;
+  box-shadow:none;
+}
+.minimap-box .panel-title{
+  position:absolute;
+  top:6px;
+  left:6px;
+  margin:0;
+  z-index:2;
+  pointer-events:none;
+}
+#minimapCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+}
+.minimap-box{
+  width:160px;
+  height:160px;
+  border:2px solid rgba(255,255,255,0.25);
+  background:rgba(0,0,0,0.25);
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+  box-sizing:border-box;
+}
+#minimapCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+/* Remove panel-title vertical layout related to minimap */
+.minimap-box .panel-title{display:none!important;}
+
+/* --- Minimap canvas cleanup --- */
+#minimapCanvas, canvas.minimap{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+/* removed stray closing brace below */
+.minimap-box,
+.minimap-box *,
+.minimap-box::before,
+.minimap-box::after{
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#minimapCanvas{
+  background: transparent !important;
+  border: none !important;
+}
+/* --- Ensure no background/box for minimap container and title --- */
+.panel.minimap-box,
+.xian-panel.minimap-box{
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.minimap-box .panel-title{
+  background: transparent !important;
+}
+
+/* ===== Custom Overrides ===== */
+.cultivation-panel{
+  background: rgba(255,255,255,0.15);
+}
+.tre-desc{
+  font-size: 13px;
+  color:#f0e3c0;
+  margin-top:2px;
+}
+
+/* Cultivation panel */
+.cultivation-panel.hidden{
+  display:none;
+}
+.float-text.ft-minion{
+  font-size:14px;
+  color:#ffffff;
+}
+.float-text.ft-elite{
+  font-size:20px;
+  color:#ffd74d;
+  text-shadow:0 0 6px rgba(255,215,0,0.8);
+}
+.float-text.ft-boss{
+  font-size:28px;
+  color:#ffd700;
+  text-shadow:0 0 8px rgba(0,0,0,0.9), 0 0 12px rgba(255,0,0,0.8);
+}
+.modal{ position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:1000; font-family: "KaiTi", serif; }
+.modal.hidden{ display:none; }
+.modal-content{ background:rgba(255,248,235,0.95); padding:24px 40px; border:3px solid #d4af37; border-radius:12px; text-align:center; box-shadow:0 0 12px rgba(0,0,0,0.5); }
+.modal-content h2{ margin-top:0; font-size:28px; color:#8B4513; }
+.modal-content p{ margin:6px 0; font-size:18px; color:#333; }
+.modal-content button{ margin-top:12px; padding:6px 18px; font-size:16px; background:#d4af37; color:#fff; border:none; border-radius:6px; cursor:pointer; }
+.modal-content button:hover{ filter:brightness(1.1); }
+
+/* ===== Xian Style Panel ===== */
+.xian-panel{
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.25);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-family: "KaiTi", serif;
+  font-size: 14px;
+  color:#e9e4d8;
+}
+.panel-title{
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:4px;
+  color:#f9d58b;
+  text-shadow:0 0 6px rgba(249,213,139,0.6);
+}
+.minimap-box{
+  width: 160px;
+  height: 160px;
+  position:relative;
+  overflow:hidden;
+  background:rgba(255,248,235,0.08);
+  border:4px solid transparent;
+  border-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%228%22 height=%228%22 viewBox=%220 0 8 8%22><rect width=%228%22 height=%228%22 fill=%22%23d4af37%22/><rect y=%221%22 width=%228%22 height=%226%22 fill=%22%23f9f5e3%22/></svg>') 4 stretch;
+  box-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+#minimapCanvas{
+  width:100%;
+  height:100%;
+  display:block;
+  background:rgba(0,0,0,0.25);
+  border:none;
+}
+/* improve panel text readability */
+.xian-panel{
+  color:#ffffff;
+}
+#stats span{
+  color:#dcd9c9;
+}
+.panel-title{
+  color:#ffe7aa;
+}
+
+#minimap-container{
+  position:relative;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+  border:1px solid rgba(255,255,255,0.2);
+}
+.minimap-dot{
+  position:absolute;
+  width:4px;
+  height:4px;
+  background:#ff5656;
+  border-radius:50%;
+}
+.minimap-player{
+  background:#6cfaff;
+}
+.minimap-box{
+  position:relative;
+}
+.minimap-box .panel-title{
+  position:absolute;
+  top:6px;
+  left:6px;
+  margin:0;
+  z-index:2;
+  pointer-events:none;
+}
+#minimapCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+}
+.minimap-box{
+  width:160px;
+  height:160px;
+  border:2px solid rgba(255,255,255,0.25);
+  background:rgba(0,0,0,0.25);
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+  box-sizing:border-box;
+}
+#minimapCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+/* Remove panel-title vertical layout related to minimap */
+.minimap-box .panel-title{display:none!important;}
+
+/* --- Minimap canvas cleanup --- */
+#minimapCanvas, canvas.minimap{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+/* removed stray closing brace below */
+.minimap-box,
+.minimap-box *,
+.minimap-box::before,
+.minimap-box::after{
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#minimapCanvas{
+  background: transparent !important;
+  border: none !important;
+}
+/* --- Minimap final override to ensure visibility --- */
+#minimapCanvas,
+canvas.minimap{
+  width:160px;
+  height:160px;
+  background: rgba(0,0,0,0.35) !important;
+  border:none !important;
+  box-shadow:none !important;
+}
+.minimap-box{
+  width:160px;
+  height:160px;
+  position:relative;
+  background:none;
+  border:none;
+  box-shadow:none;
+}
+.minimap-box .panel-title{
+  position:absolute;
+  top:6px;
+  left:6px;
+  margin:0;
+  z-index:2;
+  pointer-events:none;
+}
+#minimapCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+}
+.minimap-box{
+  width:160px;
+  height:160px;
+  position:relative;
+  background:none;
+  border:none;
+  box-shadow:none;
+}
+.minimap-box .panel-title{
+  position:absolute;
+  top:6px;
+  left:6px;
+  margin:0;
+  z-index:2;
+  pointer-events:none;
+}
+#minimapCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+}
+.minimap-box{
+  width:160px;
+  height:160px;
+  border:2px solid rgba(255,255,255,0.25);
+  background:rgba(0,0,0,0.25);
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+  box-sizing:border-box;
+}
+#minimapCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+/* Remove panel-title vertical layout related to minimap */
+.minimap-box .panel-title{display:none!important;}
+
+/* --- Minimap canvas cleanup --- */
+#minimapCanvas, canvas.minimap{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+/* removed stray closing brace below */
+.minimap-box,
+.minimap-box *,
+.minimap-box::before,
+.minimap-box::after{
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#minimapCanvas{
+  background: transparent !important;
+  border: none !important;
+}
+/* --- Ensure no background/box for minimap container and title --- */
+.panel.minimap-box,
+.xian-panel.minimap-box{
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.minimap-box .panel-title{
+  background: transparent !important;
+}
+
+/* ===== Custom Overrides ===== */
+.cultivation-panel{
+  background: rgba(255,255,255,0.15);
+}
+.tre-desc{
+  font-size: 13px;
+  color:#f0e3c0;
+  margin-top:2px;
+}
+
+/* Cultivation panel */
+.cultivation-panel.hidden{
+  display:none;
+}
+.float-text.ft-minion{
+  font-size:14px;
+  color:#ffffff;
+}
+.float-text.ft-elite{
+  font-size:20px;
+  color:#ffd74d;
+  text-shadow:0 0 6px rgba(255,215,0,0.8);
+}
+.float-text.ft-boss{
+  font-size:28px;
+  color:#ffd700;
+  text-shadow:0 0 8px rgba(0,0,0,0.9), 0 0 12px rgba(255,0,0,0.8);
+}
+.modal{ position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:1000; font-family: "KaiTi", serif; }
+.modal.hidden{ display:none; }
+.modal-content{ background:rgba(255,248,235,0.95); padding:24px 40px; border:3px solid #d4af37; border-radius:12px; text-align:center; box-shadow:0 0 12px rgba(0,0,0,0.5); }
+.modal-content h2{ margin-top:0; font-size:28px; color:#8B4513; }
+.modal-content p{ margin:6px 0; font-size:18px; color:#333; }
+.modal-content button{ margin-top:12px; padding:6px 18px; font-size:16px; background:#d4af37; color:#fff; border:none; border-radius:6px; cursor:pointer; }
+.modal-content button:hover{ filter:brightness(1.1); }
+
+/* ===== Xian Style Panel ===== */
+.xian-panel{
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.25);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-family: "KaiTi", serif;
+  font-size: 14px;
+  color:#e9e4d8;
+}
+.panel-title{
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:4px;
+  color:#f9d58b;
+  text-shadow:0 0 6px rgba(249,213,139,0.6);
+}
+.minimap-box{
+  width: 160px;
+  height: 160px;
+  position:relative;
+  overflow:hidden;
+  background:rgba(255,248,235,0.08);
+  border:4px solid transparent;
+  border-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%228%22 height=%228%22 viewBox=%220 0 8 8%22><rect width=%228%22 height=%228%22 fill=%22%23d4af37%22/><rect y=%221%22 width=%228%22 height=%226%22 fill=%22%23f9f5e3%22/></svg>') 4 stretch;
+  box-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+#minimapCanvas{
+  width:100%;
+  height:100%;
+  display:block;
+  background:rgba(0,0,0,0.25);
+  border:none;
+}
+/* improve panel text readability */
+.xian-panel{
+  color:#ffffff;
+}
+#stats span{
+  color:#dcd9c9;
+}
+.panel-title{
+  color:#ffe7aa;
+}
+
+#minimap-container{
+  position:relative;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+  border:1px solid rgba(255,255,255,0.2);
+}
+.minimap-dot{
+  position:absolute;
+  width:4px;
+  height:4px;
+  background:#ff5656;
+  border-radius:50%;
+}
+.minimap-player{
+  background:#6cfaff;
+}
+.minimap-box{
+  position:relative;
+}
+.minimap-box .panel-title{
+  position:absolute;
+  top:6px;
+  left:6px;
+  margin:0;
+  z-index:2;
+  pointer-events:none;
+}
+#minimapCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+}
+.minimap-box{
+  width:160px;
+  height:160px;
+  border:2px solid rgba(255,255,255,0.25);
+  background:rgba(0,0,0,0.25);
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+  box-sizing:border-box;
+}
+#minimapCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+/* Remove panel-title vertical layout related to minimap */
+.minimap-box .panel-title{display:none!important;}
+
+/* --- Minimap canvas cleanup --- */
+#minimapCanvas, canvas.minimap{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+/* removed stray closing brace below */
+.minimap-box,
+.minimap-box *,
+.minimap-box::before,
+.minimap-box::after{
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#minimapCanvas{
+  background: transparent !important;
+  border: none !important;
+}
+/* --- Ensure no background/box for minimap container and title --- */
+.panel.minimap-box,
+.xian-panel.minimap-box{
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.minimap-box .panel-title{
+  background: transparent !important;
+}
+
+/* ===== Custom Overrides ===== */
+.cultivation-panel{
+  background: rgba(255,255,255,0.15);
+}
+.tre-desc{
+  font-size: 13px;
+  color:#f0e3c0;
+  margin-top:2px;
+}
+
+/* Cultivation panel */
+.cultivation-panel.hidden{
+  display:none;
+}
+.float-text.ft-minion{
+  font-size:14px;
+  color:#ffffff;
+}
+.float-text.ft-elite{
+  font-size:20px;
+  color:#ffd74d;
+  text-shadow:0 0 6px rgba(255,215,0,0.8);
+}
+.float-text.ft-boss{
+  font-size:28px;
+  color:#ffd700;
+  text-shadow:0 0 8px rgba(0,0,0,0.9), 0 0 12px rgba(255,0,0,0.8);
+}
+.modal{ position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:1000; font-family: "KaiTi", serif; }
+.modal.hidden{ display:none; }
+.modal-content{ background:rgba(255,248,235,0.95); padding:24px 40px; border:3px solid #d4af37; border-radius:12px; text-align:center; box-shadow:0 0 12px rgba(0,0,0,0.5); }
+.modal-content h2{ margin-top:0; font-size:28px; color:#8B4513; }
+.modal-content p{ margin:6px 0; font-size:18px; color:#333; }
+.modal-content button{ margin-top:12px; padding:6px 18px; font-size:16px; background:#d4af37; color:#fff; border:none; border-radius:6px; cursor:pointer; }
+.modal-content button:hover{ filter:brightness(1.1); }
+
+/* ===== Xian Style Panel ===== */
+.xian-panel{
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.25);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-family: "KaiTi", serif;
+  font-size: 14px;
+  color:#e9e4d8;
+}
+.panel-title{
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:4px;
+  color:#f9d58b;
+  text-shadow:0 0 6px rgba(249,213,139,0.6);
+}
+.minimap-box{
+  width: 160px;
+  height: 160px;
+  position:relative;
+  overflow:hidden;
+  background:rgba(255,248,235,0.08);
+  border:4px solid transparent;
+  border-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%228%22 height=%228%22 viewBox=%220 0 8 8%22><rect width=%228%22 height=%228%22 fill=%22%23d4af37%22/><rect y=%221%22 width=%228%22 height=%226%22 fill=%22%23f9f5e3%22/></svg>') 4 stretch;
+  box-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+#minimapCanvas{
+  width:100%;
+  height:100%;
+  display:block;
+  background:rgba(0,0,0,0.25);
+  border:none;
+}
+/* improve panel text readability */
+.xian-panel{
+  color:#ffffff;
+}
+#stats span{
+  color:#dcd9c9;
+}
+.panel-title{
+  color:#ffe7aa;
+}
+
+#minimap-container{
+  position:relative;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+  border:1px solid rgba(255,255,255,0.2);
+}
+.minimap-dot{
+  position:absolute;
+  width:4px;
+  height:4px;
+  background:#ff5656;
+  border-radius:50%;
+}
+.minimap-player{
+  background:#6cfaff;
+}
+.minimap-box{
+  position:relative;
+}
+.minimap-box .panel-title{
+  position:absolute;
+  top:6px;
+  left:6px;
+  margin:0;
+  z-index:2;
+  pointer-events:none;
+}
+#minimapCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+}
+.minimap-box{
+  width:160px;
+  height:160px;
+  border:2px solid rgba(255,255,255,0.25);
+  background:rgba(0,0,0,0.25);
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+  box-sizing:border-box;
+}
+#minimapCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+/* Remove panel-title vertical layout related to minimap */
+.minimap-box .panel-title{display:none!important;}
+
+/* --- Minimap canvas cleanup --- */
+#minimapCanvas, canvas.minimap{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+/* removed stray closing brace below */
+.minimap-box,
+.minimap-box *,
+.minimap-box::before,
+.minimap-box::after{
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#minimapCanvas{
+  background: transparent !important;
+  border: none !important;
+}
+/* --- Ensure no background/box for minimap container and title --- */
+.panel.minimap-box,
+.xian-panel.minimap-box{
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.minimap-box .panel-title{
+  background: transparent !important;
+}
+
+/* ===== Custom Overrides ===== */
+.cultivation-panel{
+  background: rgba(255,255,255,0.15);
+}
+.tre-desc{
+  font-size: 13px;
+  color:#f0e3c0;
+  margin-top:2px;
+}
+
+/* Cultivation panel */
+.cultivation-panel.hidden{
+  display:none;
+}
+
+/* 金色稍大浮动文字（佛陀技能） */
+.float-text.ft-gold{
+  font-size:22px;
+  color:#ffd700;
+  text-shadow: 0 0 10px rgba(255,215,0,0.85), 0 0 4px rgba(255,215,0,0.65);
+}
+/* 牛魔王Boss技能红色提示 */
+.float-text.ft-boss-red{
+  color: #ff2b2b;
+  text-shadow: 0 0 2px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.75), 0 2px 8px rgba(0,0,0,0.6);
+  font-weight: 800;
+}
+
+/* Boss skill prompt enhanced styles */
+/* Fairy - 改为绿色环绕阴影，无底色 */
+.float-text.ft-boss-green {
+  color: #2ecc71; /* 绿色 */
+  font-size: 28px;
+  font-weight: 800;
+  background: none;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow:
+    0 0 2px rgba(46, 204, 113, 0.95),
+    0 0 6px rgba(46, 204, 113, 0.85),
+    0 0 10px rgba(46, 204, 113, 0.75),
+    0 0 16px rgba(46, 204, 113, 0.6),
+    -1px 0 0 rgba(46, 204, 113, 0.95),
+    1px 0 0 rgba(46, 204, 113, 0.95),
+    0 -1px 0 rgba(46, 204, 113, 0.95),
+    0 1px 0 rgba(46, 204, 113, 0.95);
+  -webkit-text-stroke: 1.2px rgba(46, 204, 113, 0.6);
+}
+
+/* Niu Mo Wang - 改为红色环绕阴影，无底色 */
+.float-text.ft-boss-red {
+  color: #ff3b30; /* 红色 */
+  font-size: 30px;
+  font-weight: 900;
+  background: none;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow:
+    0 0 2px rgba(255, 59, 48, 0.95),
+    0 0 6px rgba(255, 59, 48, 0.85),
+    0 0 12px rgba(255, 59, 48, 0.7),
+    0 0 18px rgba(255, 59, 48, 0.55),
+    -1px 0 0 rgba(255, 59, 48, 0.95),
+    1px 0 0 rgba(255, 59, 48, 0.95),
+    0 -1px 0 rgba(255, 59, 48, 0.95),
+    0 1px 0 rgba(255, 59, 48, 0.95);
+  -webkit-text-stroke: 1.2px rgba(255, 59, 48, 0.6);
+}
+
+/* Long Wang - 改为蓝色环绕阴影，无底色 */
+.float-text.ft-boss-blue {
+  color: #2196f3; /* 蓝色 */
+  font-size: 30px;
+  font-weight: 900;
+  background: none;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow:
+    0 0 2px rgba(33, 150, 243, 0.95),
+    0 0 6px rgba(33, 150, 243, 0.85),
+    0 0 12px rgba(33, 150, 243, 0.7),
+    0 0 18px rgba(33, 150, 243, 0.55),
+    -1px 0 0 rgba(33, 150, 243, 0.95),
+    1px 0 0 rgba(33, 150, 243, 0.95),
+    0 -1px 0 rgba(33, 150, 243, 0.95),
+    0 1px 0 rgba(33, 150, 243, 0.95);
+  -webkit-text-stroke: 1.2px rgba(33, 150, 243, 0.6);
+}
+
+/* Fo Tuo - 改为金色环绕阴影，无底色 */
+.float-text.ft-boss-buddha {
+  color: #ffd700; /* 金色 */
+  font-size: 32px;
+  font-weight: 900;
+  background: none;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow:
+    0 0 3px rgba(255, 215, 0, 0.95),
+    0 0 8px rgba(255, 215, 0, 0.85),
+    0 0 14px rgba(255, 215, 0, 0.7),
+    0 0 20px rgba(255, 215, 0, 0.55),
+    -1.2px 0 0 rgba(255, 215, 0, 0.95),
+    1.2px 0 0 rgba(255, 215, 0, 0.95),
+    0 -1.2px 0 rgba(255, 215, 0, 0.95),
+    0 1.2px 0 rgba(255, 215, 0, 0.95);
+  -webkit-text-stroke: 1.5px rgba(255, 215, 0, 0.6);
+}
+
+/* Boss - 天帝金色主题：改为金色环绕阴影，无底色 */
+.float-text.ft-boss-gold{
+  color: #d4af37;
+  font-size: 28px;
+  font-weight: 800;
+  background: none;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow:
+    0 0 3px rgba(212, 175, 55, 0.95),
+    0 0 8px rgba(212, 175, 55, 0.85),
+    0 0 14px rgba(212, 175, 55, 0.7),
+    0 0 20px rgba(212, 175, 55, 0.55),
+    -1.2px 0 0 rgba(212, 175, 55, 0.95),
+    1.2px 0 0 rgba(212, 175, 55, 0.95),
+    0 -1.2px 0 rgba(212, 175, 55, 0.95),
+    0 1.2px 0 rgba(212, 175, 55, 0.95);
+  -webkit-text-stroke: 1.5px rgba(212, 175, 55, 0.6);
+}
